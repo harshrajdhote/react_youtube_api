@@ -4,6 +4,7 @@
 //react is split up into two parts react core and react Dom here we have to use react dom
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
+import _ from 'lodash';
 import VideoDetail from './component/video_detail';
 import YTSearch from 'youtube-api-search';
 import SearchBar from './component/search_bar' ;
@@ -15,14 +16,18 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {videos : [],selectedVideo:null };
-        YTSearch({key: API_KEY,term: 'WceSangli'},(videos)=>{
+        this.videoSearch("Nagpur");
+    }
+    videoSearch(item){
+        YTSearch({key: API_KEY,term: item},(videos)=>{
             this.setState({videos:videos,
             selectedVideo:videos[0]});
         });
     }
    render(){
+       const videoSearch = _.debounce((term)=>{ this.videoSearch(term)},300) //call once every 300ms  
     return (<div>
-        <SearchBar />
+        <SearchBar onSearchTermChange={term => videoSearch(term)}/>
         <VideoDetail video = {this.state.selectedVideo}/>
         <VideoList onVideoSelect={selectedVideo => this.setState({selectedVideo})}
         videos={this.state.videos}/>

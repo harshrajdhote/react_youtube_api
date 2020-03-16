@@ -10,19 +10,19 @@ class SearchBar extends  Component{
    //control input changes automatically when state changes
      render(){
         return (
-           <div>
+           <div className="search-bar">
         <input
         value={this.state.term}  
-        onChange={(event)=> this.setState({term : event.target.value})}/> 
-        <br/>Value of the Input: {this.state.term} 
-        </div>
+        onChange={(event)=> this.onInputChange(event.target.value )}/> 
+             </div>
         )
       }
       //here we are changing value from state not from keyboard rerendering occurs
       //every class has render function
       //rerendering here when ever state is changing
-     onInputChange(event){ //event describe context of event and more info
-        console.log(event.target.value)
+     onInputChange(term){ //event describe context of event and more info
+        this.setState({term});
+        this.props.onSearchTermChange(term);
      }
 
 }
